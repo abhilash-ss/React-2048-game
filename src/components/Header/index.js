@@ -1,7 +1,7 @@
 import React from 'react';
 import './Header.scss';
 
-export default function Header({ score, best }) {
+export default function Header({ score, best, onClickNewGame }) {
   return (
     <div className='header'>
       <div className='header__group'>
@@ -15,9 +15,14 @@ export default function Header({ score, best }) {
             <span className='header__score-box--title'>BEST</span>
             <span>{best}</span>
           </div>
+          <button className='header__button' onClick={onClickNewGame}>
+            New Game
+          </button>
         </div>
       </div>
-      <p>Join the number and get to the 2048 tile!</p>
+      <div className='header__group'>
+        <p>Join the number and get to the 2048 tile!</p>
+      </div>
     </div>
   );
 }

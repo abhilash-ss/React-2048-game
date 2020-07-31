@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Block from './components/Block';
 import './App.scss';
 import cloneDeep from 'lodash.clonedeep';
 import useEvent from './Hooks/useEvent';
+import useLocalStorage from './Hooks/useLocalStorage';
 import getNewPosition from './utils/getNewPosition';
 import isExist from './utils/isExist';
 import Header from './components/Header';
@@ -14,14 +15,16 @@ function App() {
   const RIGHT = 39;
   // const STOP = 27;
 
-  const [data, setData] = useState([
+  const INITIAL_DATA = [
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
-  ]);
-  const [score, setScore] = useState(0);
-  const [best, setBest] = useState(0);
+  ];
+  const [data, setData] = useLocalStorage('data', INITIAL_DATA);
+  const [newGame, setNewGame] = useLocalStorage('newGame', true);
+  const [score, setScore] = useLocalStorage('score', 0);
+  const [best, setBest] = useLocalStorage('best', 0);
 
   // Inititalize
   const initialize = () => {
@@ -32,6 +35,7 @@ function App() {
     addItem(newGrid);
 
     setData(newGrid);
+    setNewGame(false);
   };
 
   // Add item
@@ -274,7 +278,12 @@ function App() {
     } else return true;
   };
 
-  //TODO: Reset
+  // Reset, New Game
+  const onClickNewGame = () => {
+    setNewGame(true);
+    setScore(0);
+    setData(INITIAL_DATA);
+  };
 
   const handleKeyDown = (event) => {
     switch (event.keyCode) {
@@ -296,15 +305,17 @@ function App() {
   };
 
   useEffect(() => {
-    initialize();
-  }, []);
+    if (newGame) {
+      initialize();
+    }
+  }, [newGame]);
 
   useEvent('keydown', handleKeyDown);
 
   return (
     <div className='wrapper'>
       <div className='app-wrapper'>
-        <Header score={score} best={best} />
+        <Header score={score} best={best} onClickNewGame={onClickNewGame} />
         <div className='App'>
           {data.map((row, rowIndex) => {
             return (

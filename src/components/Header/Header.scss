@@ -17,7 +17,11 @@
   &__score {
     &-container {
       display: flex;
-      align-items: flex-start;
+      //   align-items: flex-start;
+      justify-content: center;
+      flex-flow: row wrap;
+      flex: 1 100%;
+      width: min-content;
     }
     &-box {
       display: flex;
@@ -33,8 +37,19 @@
       margin-left: 10px;
 
       &--title {
-          color: #eee4da;
+        color: #eee4da;
       }
     }
+  }
+
+  &__button {
+    background: #8f7a66;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    height: 40px;
+    margin: 10px 10px 0 10px;
+    cursor: pointer;
   }
 }
