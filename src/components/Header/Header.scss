@@ -1,0 +1,40 @@
+.header {
+  display: flex;
+  flex-direction: column;
+
+  &__group {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__title {
+    color: #787267;
+    font-weight: bold;
+    font-size: 70px;
+    margin: 0;
+  }
+
+  &__score {
+    &-container {
+      display: flex;
+      align-items: flex-start;
+    }
+    &-box {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #baaea0;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      padding: 5px 15px;
+      border-radius: 3px;
+      margin-left: 10px;
+
+      &--title {
+          color: #eee4da;
+      }
+    }
+  }
+}

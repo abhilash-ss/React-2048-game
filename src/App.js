@@ -5,6 +5,7 @@ import cloneDeep from 'lodash.clonedeep';
 import useEvent from './Hooks/useEvent';
 import getNewPosition from './utils/getNewPosition';
 import isExist from './utils/isExist';
+import Header from './components/Header';
 
 function App() {
   const UP = 38;
@@ -19,6 +20,8 @@ function App() {
     [0, 0, 0, 0],
     [0, 0, 0, 0],
   ]);
+  const [score, setScore] = useState(0);
+  const [best, setBest] = useState(0);
 
   // Inititalize
   const initialize = () => {
@@ -91,6 +94,7 @@ function App() {
         } else if (b[slow] !== 0 && b[fast] !== 0) {
           if (b[slow] === b[fast]) {
             b[slow] = b[slow] + b[fast];
+            setScore(score + b[slow]);
             b[fast] = 0;
             fast = slow + 1;
             slow++;
@@ -139,6 +143,7 @@ function App() {
         } else if (b[slow] !== 0 && b[fast] !== 0) {
           if (b[slow] === b[fast]) {
             b[slow] = b[slow] + b[fast];
+            setScore(score + b[slow]);
             b[fast] = 0;
             fast = slow - 1;
             slow--;
@@ -186,6 +191,7 @@ function App() {
         } else if (b[slow][i] !== 0 && b[fast][i] !== 0) {
           if (b[slow][i] === b[fast][i]) {
             b[slow][i] = b[slow][i] + b[fast][i];
+            setScore(score + b[slow][i]);
             b[fast][i] = 0;
             fast = slow - 1;
             slow--;
@@ -233,6 +239,7 @@ function App() {
         } else if (b[slow][i] !== 0 && b[fast][i] !== 0) {
           if (b[slow][i] === b[fast][i]) {
             b[slow][i] = b[slow][i] + b[fast][i];
+            setScore(score + b[slow][i]);
             b[fast][i] = 0;
             fast = slow + 1;
             slow++;
@@ -295,16 +302,21 @@ function App() {
   useEvent('keydown', handleKeyDown);
 
   return (
-    <div className='App'>
-      {data.map((row, rowIndex) => {
-        return (
-          <div key={rowIndex} style={{ display: 'flex' }}>
-            {row.map((num, index) => (
-              <Block num={num} key={index} />
-            ))}
-          </div>
-        );
-      })}
+    <div className='wrapper'>
+      <div className='app-wrapper'>
+        <Header score={score} best={best} />
+        <div className='App'>
+          {data.map((row, rowIndex) => {
+            return (
+              <div key={rowIndex} style={{ display: 'flex' }}>
+                {row.map((num, index) => (
+                  <Block num={num} key={index} />
+                ))}
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
