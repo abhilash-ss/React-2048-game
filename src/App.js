@@ -25,6 +25,7 @@ function App() {
   const [newGame, setNewGame] = useLocalStorage('newGame', true);
   const [score, setScore] = useLocalStorage('score', 0);
   const [best, setBest] = useLocalStorage('best', 0);
+  const [scoreHistory, setScoreHistory] = useLocalStorage('scoreHistory', []);
 
   // Inititalize
   const initialize = () => {
@@ -280,6 +281,7 @@ function App() {
 
   // Reset, New Game
   const onClickNewGame = () => {
+    setScoreHistory([...scoreHistory, score])
     setNewGame(true);
     setScore(0);
     setData(INITIAL_DATA);
@@ -309,6 +311,12 @@ function App() {
       initialize();
     }
   }, [newGame]);
+
+  useEffect(() => {
+
+    console.log('its inside here')
+    setBest(Math.max(...scoreHistory, score))
+  }, [score]);
 
   useEvent('keydown', handleKeyDown);
 
