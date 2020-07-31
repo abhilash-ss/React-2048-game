@@ -1,24 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Block from './components/Block';
+import './App.scss';
 
 function App() {
+  const [data, setData] = useState([
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+  ]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      {data.map((row, rowIndex) => {
+        return (
+          <div key={rowIndex} style={{display: 'flex'}}>
+            {row.map((num, index) => (
+              <Block num={num} key={index} />
+            ))}
+          </div>
+        );
+      })}
     </div>
   );
 }
