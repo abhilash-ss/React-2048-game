@@ -28,6 +28,9 @@ function App() {
   const [best, setBest] = useLocalStorage('best', 0);
   const [scoreHistory, setScoreHistory] = useLocalStorage('scoreHistory', []);
   const [isWon, setIsWon] = useLocalStorage('isWon', false);
+  const [moveHistory, setMoveHistory] = useLocalStorage('moveHistory', []);
+  const [undoMoves, setUndoMoves] = useLocalStorage('undoMoves', []);
+  const [replayStatus, setReplayStatus] = useLocalStorage('replayStatus', false);
 
   // Inititalize
   const initialize = () => {
@@ -88,6 +91,14 @@ function App() {
       return;
     }
 
+    if(replayStatus) {
+      return;
+    }
+    
+    if(undoMoves.length) {
+      setUndoMoves([]);
+    }
+
     for (let i = 0; i < 4; i++) {
       let b = newArray[i];
       let slow = 0;
@@ -123,6 +134,7 @@ function App() {
     }
 
     if (JSON.stringify(oldGrid) !== JSON.stringify(newArray)) {
+      setMoveHistory([...moveHistory, oldGrid]);
       if (isExist(newArray, 2048)) {
         setIsWon(true);
         setData(newArray);
@@ -144,6 +156,14 @@ function App() {
     if (isWon) {
       alert('congratz');
       return;
+    }
+
+    if(replayStatus) {
+      return;
+    }
+
+    if(undoMoves.length) {
+      setUndoMoves([]);
     }
 
     for (let i = 3; i >= 0; i--) {
@@ -181,6 +201,7 @@ function App() {
     }
 
     if (JSON.stringify(oldGrid) !== JSON.stringify(newArray)) {
+      setMoveHistory([...moveHistory, oldGrid]);
       if (isExist(newArray, 2048)) {
         setIsWon(true);
         setData(newArray);
@@ -205,6 +226,14 @@ function App() {
       return;
     }
 
+    if(replayStatus) {
+      return;
+    }
+
+    if(undoMoves.length) {
+      setUndoMoves([]);
+    }
+
     for (let i = 3; i >= 0; i--) {
       let slow = b.length - 1;
       let fast = slow - 1;
@@ -240,6 +269,7 @@ function App() {
     }
 
     if (JSON.stringify(oldData) !== JSON.stringify(b)) {
+      setMoveHistory([...moveHistory, oldData]);
       if (isExist(b, 2048)) {
         setIsWon(true);
         setData(b);
@@ -261,6 +291,14 @@ function App() {
     if (isWon) {
       alert('congratz');
       return;
+    }
+
+    if(replayStatus) {
+      return;
+    }
+
+    if(undoMoves.length) {
+      setUndoMoves([]);
     }
 
     for (let i = 0; i < 4; i++) {
@@ -297,6 +335,7 @@ function App() {
     }
 
     if (JSON.stringify(oldData) !== JSON.stringify(b)) {
+      setMoveHistory([...moveHistory, oldData]);
       if (isExist(b, 2048)) {
         setIsWon(true);
         setData(b);
@@ -326,10 +365,48 @@ function App() {
   // Reset, New Game
   const onClickNewGame = () => {
     setScoreHistory([...scoreHistory, score]);
+    setMoveHistory([]);
+    setUndoMoves([]);
     setIsWon(false);
     setNewGame(true);
     setScore(0);
     setData(INITIAL_DATA);
+  };
+
+  // Undo
+  const onClickUndo = () => {
+    const history = cloneDeep(moveHistory);
+    const lastMove = history.pop();
+    setMoveHistory(history);
+    setUndoMoves([...undoMoves, data])
+    setData(lastMove);
+  };
+
+  // Replay
+  const onClickReplay = () => {
+    setReplayStatus(true);
+    const history = cloneDeep(moveHistory);
+    history.push(data);
+    for (let i = 0; i < history.length; i++) {
+      setTimeout(() => {
+        console.log('replay in progress', i);
+        setData(history[i]);
+        if(i===history.length-1) {
+          setReplayStatus(false)
+        }
+      }, i * 1000);
+    }
+  };
+
+  // Redo
+  const onClickRedo = () => {
+    const history = cloneDeep(moveHistory);
+    const uMoves = cloneDeep(undoMoves);
+    const nextMove = uMoves.pop();
+    history.push(data);
+    setMoveHistory(history);
+    setUndoMoves(uMoves);
+    setData(nextMove);
   };
 
   const handleKeyDown = (event) => {
@@ -379,8 +456,15 @@ function App() {
           })}
         </div>
       </div>
-      <div style={{marginTop: '40px'}}>
-        <ActionPanel />
+      <div style={{ marginTop: '40px' }}>
+        <ActionPanel
+          onClickUndo={onClickUndo}
+          disableUndo={!moveHistory.length || replayStatus}
+          onClickReplay={onClickReplay}
+          disableReplay={replayStatus}
+          onClickRedo={onClickRedo}
+          disableRedo={!undoMoves.length || replayStatus}
+        />
       </div>
     </div>
   );
