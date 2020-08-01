@@ -1,4 +1,4 @@
-const isExist = (array, term) => {
+const isExist = (array, term=0) => {
   let found = false;
 
   for (let i = 0; i < array.length; i++) {

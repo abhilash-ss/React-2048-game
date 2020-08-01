@@ -26,6 +26,7 @@ function App() {
   const [score, setScore] = useLocalStorage('score', 0);
   const [best, setBest] = useLocalStorage('best', 0);
   const [scoreHistory, setScoreHistory] = useLocalStorage('scoreHistory', []);
+  const [isWon, setIsWon] = useLocalStorage('isWon', false);
 
   // Inititalize
   const initialize = () => {
@@ -52,6 +53,10 @@ function App() {
     //   }
     // }
 
+    // if(isExist(newGrid, 64)) {
+    //   alert('congratulations');
+    //   return;
+    // }
     let [rand1, rand2] = getNewPosition(newGrid);
 
     while (newGrid[rand1][rand2] !== 0) {
@@ -77,6 +82,11 @@ function App() {
     let oldGrid = data;
     let newArray = cloneDeep(data);
 
+    if(isWon) {
+      alert('congratz');
+      return;
+    }
+
     for (let i = 0; i < 4; i++) {
       let b = newArray[i];
       let slow = 0;
@@ -112,7 +122,11 @@ function App() {
     }
 
     if (JSON.stringify(oldGrid) !== JSON.stringify(newArray)) {
-      addItem(newArray);
+      if (isExist(newArray, 2048)) {
+        setIsWon(true);
+        setData(newArray);
+        alert('congratulations');
+      } else addItem(newArray);
     } else if (!isExist(oldGrid) && isMove && checkGameOver()) {
       alert('GAME OVER');
     }
@@ -126,6 +140,11 @@ function App() {
     let oldGrid = data;
     let newArray = cloneDeep(data);
 
+    if(isWon) {
+      alert('congratz');
+      return;
+    }
+
     for (let i = 3; i >= 0; i--) {
       let b = newArray[i];
       let slow = b.length - 1;
@@ -159,8 +178,14 @@ function App() {
         }
       }
     }
+
     if (JSON.stringify(oldGrid) !== JSON.stringify(newArray)) {
-      addItem(newArray);
+      if (isExist(newArray, 2048)) {
+        setIsWon(true);
+        setData(newArray);
+        alert('congratulations');
+        return;
+      } else addItem(newArray);
     } else if (!isExist(oldGrid) && isMove && checkGameOver()) {
       alert('GAME OVER');
     }
@@ -173,6 +198,11 @@ function App() {
   const swipeDown = (isMove = true) => {
     let b = [...data];
     let oldData = JSON.parse(JSON.stringify(data));
+
+    if(isWon) {
+      alert('congratz');
+      return;
+    }
 
     for (let i = 3; i >= 0; i--) {
       let slow = b.length - 1;
@@ -209,7 +239,11 @@ function App() {
     }
 
     if (JSON.stringify(oldData) !== JSON.stringify(b)) {
-      addItem(b);
+      if (isExist(b, 2048)) {
+        setIsWon(true);
+        setData(b);
+        alert('congratulations');
+      } else addItem(b);
     } else if (!isExist(oldData) && isMove && checkGameOver()) {
       alert('GAME OVER');
     }
@@ -222,6 +256,11 @@ function App() {
   const swipeUp = (isMove = true) => {
     let b = [...data];
     let oldData = JSON.parse(JSON.stringify(data));
+
+    if(isWon) {
+      alert('congratz');
+      return;
+    }
 
     for (let i = 0; i < 4; i++) {
       let slow = 0;
@@ -257,7 +296,11 @@ function App() {
     }
 
     if (JSON.stringify(oldData) !== JSON.stringify(b)) {
-      addItem(b);
+      if (isExist(b, 2048)) {
+        setIsWon(true);
+        setData(b);
+        alert('congratulations');
+      } else addItem(b);
     } else if (!isExist(oldData) && isMove && checkGameOver()) {
       alert('GAME OVER');
     }
@@ -281,7 +324,8 @@ function App() {
 
   // Reset, New Game
   const onClickNewGame = () => {
-    setScoreHistory([...scoreHistory, score])
+    setScoreHistory([...scoreHistory, score]);
+    setIsWon(false);
     setNewGame(true);
     setScore(0);
     setData(INITIAL_DATA);
@@ -313,9 +357,7 @@ function App() {
   }, [newGame]);
 
   useEffect(() => {
-
-    console.log('its inside here')
-    setBest(Math.max(...scoreHistory, score))
+    setBest(Math.max(...scoreHistory, score));
   }, [score]);
 
   useEvent('keydown', handleKeyDown);
