@@ -7,6 +7,7 @@ import useLocalStorage from './Hooks/useLocalStorage';
 import getNewPosition from './utils/getNewPosition';
 import isExist from './utils/isExist';
 import Header from './components/Header';
+import ActionPanel from './components/ActionPanel';
 
 function App() {
   const UP = 38;
@@ -82,7 +83,7 @@ function App() {
     let oldGrid = data;
     let newArray = cloneDeep(data);
 
-    if(isWon) {
+    if (isWon) {
       alert('congratz');
       return;
     }
@@ -140,7 +141,7 @@ function App() {
     let oldGrid = data;
     let newArray = cloneDeep(data);
 
-    if(isWon) {
+    if (isWon) {
       alert('congratz');
       return;
     }
@@ -199,7 +200,7 @@ function App() {
     let b = [...data];
     let oldData = JSON.parse(JSON.stringify(data));
 
-    if(isWon) {
+    if (isWon) {
       alert('congratz');
       return;
     }
@@ -257,7 +258,7 @@ function App() {
     let b = [...data];
     let oldData = JSON.parse(JSON.stringify(data));
 
-    if(isWon) {
+    if (isWon) {
       alert('congratz');
       return;
     }
@@ -377,6 +378,9 @@ function App() {
             );
           })}
         </div>
+      </div>
+      <div style={{marginTop: '40px'}}>
+        <ActionPanel />
       </div>
     </div>
   );

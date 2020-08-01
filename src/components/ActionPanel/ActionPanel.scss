@@ -1,0 +1,17 @@
+.action-panel {
+    display: flex;
+
+    &__group {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-weight: bold;
+    }
+
+    &__button {
+        color: white;
+        margin: 0 40px;
+    }
+}
