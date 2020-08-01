@@ -461,7 +461,7 @@ function App() {
           onClickUndo={onClickUndo}
           disableUndo={!moveHistory.length || replayStatus}
           onClickReplay={onClickReplay}
-          disableReplay={replayStatus}
+          disableReplay={replayStatus || !moveHistory.length}
           onClickRedo={onClickRedo}
           disableRedo={!undoMoves.length || replayStatus}
         />
