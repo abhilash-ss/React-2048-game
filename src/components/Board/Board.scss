@@ -1,0 +1,16 @@
+.board {
+  background: white;
+  padding: 20px;
+
+  &__body {
+    background: #ad9d8f;
+    width: max-content;
+    padding: 5px;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+
+  &__row {
+    display: flex;
+  }
+}

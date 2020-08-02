@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
-import Block from './components/Block';
+import Board from './components/Board';
 import './App.scss';
 import cloneDeep from 'lodash.clonedeep';
 import useEvent from './Hooks/useEvent';
 import useLocalStorage from './Hooks/useLocalStorage';
 import getNewPosition from './utils/getNewPosition';
 import isExist from './utils/isExist';
-import Header from './components/Header';
 import ActionPanel from './components/ActionPanel';
 
 function App() {
@@ -30,7 +29,10 @@ function App() {
   const [isWon, setIsWon] = useLocalStorage('isWon', false);
   const [moveHistory, setMoveHistory] = useLocalStorage('moveHistory', []);
   const [undoMoves, setUndoMoves] = useLocalStorage('undoMoves', []);
-  const [replayStatus, setReplayStatus] = useLocalStorage('replayStatus', false);
+  const [replayStatus, setReplayStatus] = useLocalStorage(
+    'replayStatus',
+    false
+  );
 
   // Inititalize
   const initialize = () => {
@@ -46,38 +48,13 @@ function App() {
 
   // Add item
   const addItem = (newGrid) => {
-    console.log('its calling addItem');
-    // let added = false;
-    // let gridFull = false;
-    // let attempts = 0;
-
-    // while (!added) {
-    //   if (!gridFull) {
-    //     break;
-    //   }
-    // }
-
-    // if(isExist(newGrid, 64)) {
-    //   alert('congratulations');
-    //   return;
-    // }
     let [rand1, rand2] = getNewPosition(newGrid);
 
     while (newGrid[rand1][rand2] !== 0) {
       [rand1, rand2] = getNewPosition(newGrid);
     }
-    // attempts++;
 
-    // if (newGrid[rand1][rand2] === 0) {
     newGrid[rand1][rand2] = Math.random() > 0.5 ? 2 : 4;
-
-    // added = true;
-    // }
-    // if(attempts>50) {
-    //   gridFull = true;
-    //   let gameOver = checkGameOver();
-    //   if(gameOver) alert('GAME OVER')
-    // }
   };
 
   // Swipe action
@@ -91,11 +68,11 @@ function App() {
       return;
     }
 
-    if(replayStatus) {
+    if (replayStatus) {
       return;
     }
-    
-    if(undoMoves.length) {
+
+    if (undoMoves.length) {
       setUndoMoves([]);
     }
 
@@ -158,11 +135,11 @@ function App() {
       return;
     }
 
-    if(replayStatus) {
+    if (replayStatus) {
       return;
     }
 
-    if(undoMoves.length) {
+    if (undoMoves.length) {
       setUndoMoves([]);
     }
 
@@ -226,11 +203,11 @@ function App() {
       return;
     }
 
-    if(replayStatus) {
+    if (replayStatus) {
       return;
     }
 
-    if(undoMoves.length) {
+    if (undoMoves.length) {
       setUndoMoves([]);
     }
 
@@ -293,11 +270,11 @@ function App() {
       return;
     }
 
-    if(replayStatus) {
+    if (replayStatus) {
       return;
     }
 
-    if(undoMoves.length) {
+    if (undoMoves.length) {
       setUndoMoves([]);
     }
 
@@ -378,7 +355,7 @@ function App() {
     const history = cloneDeep(moveHistory);
     const lastMove = history.pop();
     setMoveHistory(history);
-    setUndoMoves([...undoMoves, data])
+    setUndoMoves([...undoMoves, data]);
     setData(lastMove);
   };
 
@@ -391,8 +368,8 @@ function App() {
       setTimeout(() => {
         console.log('replay in progress', i);
         setData(history[i]);
-        if(i===history.length-1) {
-          setReplayStatus(false)
+        if (i === history.length - 1) {
+          setReplayStatus(false);
         }
       }, i * 1000);
     }
@@ -441,22 +418,14 @@ function App() {
   useEvent('keydown', handleKeyDown);
 
   return (
-    <div className='wrapper'>
-      <div className='app-wrapper'>
-        <Header score={score} best={best} onClickNewGame={onClickNewGame} />
-        <div className='App'>
-          {data.map((row, rowIndex) => {
-            return (
-              <div key={rowIndex} style={{ display: 'flex' }}>
-                {row.map((num, index) => (
-                  <Block num={num} key={index} />
-                ))}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-      <div style={{ marginTop: '40px' }}>
+    <div className='container'>
+      <Board
+        data={data}
+        score={score}
+        best={best}
+        onClickNewGame={onClickNewGame}
+      />
+      <div className='container__action'>
         <ActionPanel
           onClickUndo={onClickUndo}
           disableUndo={!moveHistory.length || replayStatus}
