@@ -1,0 +1,27 @@
+.popup {
+  position: absolute;
+  text-align: center;
+  text-transform: uppercase;
+  background: white;
+  padding: 10px;
+
+  &__message {
+    color: #776e65;
+    font-size: 60px;
+    font-weight: bold;
+  }
+
+  &__button {
+    margin-left: 10px;
+    text-transform: uppercase;
+    background: #8f7a66;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    height: 40px;
+    margin: 10px 10px 0 10px;
+    min-width: 75px;
+    cursor: pointer;
+  }
+}

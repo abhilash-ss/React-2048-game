@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Board from './components/Board';
 import './App.scss';
 import cloneDeep from 'lodash.clonedeep';
@@ -7,6 +7,7 @@ import useLocalStorage from './Hooks/useLocalStorage';
 import getNewPosition from './utils/getNewPosition';
 import isExist from './utils/isExist';
 import ActionPanel from './components/ActionPanel';
+import Popup from './components/Popup';
 
 function App() {
   const UP = 38;
@@ -33,7 +34,10 @@ function App() {
     'replayStatus',
     false
   );
-
+  const [popupStatus, setPopupStatus] = useState({
+    visible: false,
+    message: '',
+  });
   // Inititalize
   const initialize = () => {
     let newGrid = cloneDeep(data);
@@ -64,7 +68,7 @@ function App() {
     let newArray = cloneDeep(data);
 
     if (isWon) {
-      alert('congratz');
+      setPopupStatus({ visible: true, message: 'congratulations' });
       return;
     }
 
@@ -115,10 +119,10 @@ function App() {
       if (isExist(newArray, 2048)) {
         setIsWon(true);
         setData(newArray);
-        alert('congratulations');
+        setPopupStatus({ visible: true, message: 'congratulations' });
       } else addItem(newArray);
     } else if (!isExist(oldGrid) && isMove && checkGameOver()) {
-      alert('GAME OVER');
+      setPopupStatus({ visible: true, message: 'Game Over' });
     }
 
     if (isMove) {
@@ -131,7 +135,7 @@ function App() {
     let newArray = cloneDeep(data);
 
     if (isWon) {
-      alert('congratz');
+      setPopupStatus({ visible: true, message: 'congratulations' });
       return;
     }
 
@@ -182,11 +186,11 @@ function App() {
       if (isExist(newArray, 2048)) {
         setIsWon(true);
         setData(newArray);
-        alert('congratulations');
+        setPopupStatus({ visible: true, message: 'Congratulations' });
         return;
       } else addItem(newArray);
     } else if (!isExist(oldGrid) && isMove && checkGameOver()) {
-      alert('GAME OVER');
+      setPopupStatus({ visible: true, message: 'Game Over' });
     }
 
     if (isMove) {
@@ -199,7 +203,7 @@ function App() {
     let oldData = JSON.parse(JSON.stringify(data));
 
     if (isWon) {
-      alert('congratz');
+      setPopupStatus({ visible: true, message: 'congratulations' });
       return;
     }
 
@@ -250,10 +254,10 @@ function App() {
       if (isExist(b, 2048)) {
         setIsWon(true);
         setData(b);
-        alert('congratulations');
+        setPopupStatus({ visible: true, message: 'congratulations' });
       } else addItem(b);
     } else if (!isExist(oldData) && isMove && checkGameOver()) {
-      alert('GAME OVER');
+      setPopupStatus({ visible: true, message: 'Game Over' });
     }
 
     if (isMove) {
@@ -266,7 +270,7 @@ function App() {
     let oldData = JSON.parse(JSON.stringify(data));
 
     if (isWon) {
-      alert('congratz');
+      setPopupStatus({ visible: true, message: 'congratulations' });
       return;
     }
 
@@ -316,10 +320,10 @@ function App() {
       if (isExist(b, 2048)) {
         setIsWon(true);
         setData(b);
-        alert('congratulations');
+        setPopupStatus({ visible: true, message: 'congratulations' });
       } else addItem(b);
     } else if (!isExist(oldData) && isMove && checkGameOver()) {
-      alert('GAME OVER');
+      setPopupStatus({ visible: true, message: 'Game Over' });
     }
 
     if (isMove) {
@@ -386,6 +390,17 @@ function App() {
     setData(nextMove);
   };
 
+  // popup ok
+  const onClickOk = () => {
+    setPopupStatus({ ...popupStatus, visible: false });
+  };
+
+  // popup try
+  const onClickTry = () => {
+    setPopupStatus({ ...popupStatus, visible: false });
+    onClickNewGame();
+  };
+
   const handleKeyDown = (event) => {
     switch (event.keyCode) {
       case UP:
@@ -428,13 +443,28 @@ function App() {
       <div className='container__action'>
         <ActionPanel
           onClickUndo={onClickUndo}
-          disableUndo={!moveHistory.length || replayStatus}
+          disableUndo={!moveHistory.length || replayStatus || isWon}
           onClickReplay={onClickReplay}
           disableReplay={replayStatus || !moveHistory.length}
           onClickRedo={onClickRedo}
           disableRedo={!undoMoves.length || replayStatus}
         />
       </div>
+      {popupStatus.visible && (
+        <Popup
+          message={popupStatus.message}
+          buttons={[
+            {
+              label: 'ok',
+              onClick: onClickOk,
+            },
+            {
+              label: isWon ? 'new game' : 'try again',
+              onClick: onClickTry,
+            },
+          ]}
+        />
+      )}
     </div>
   );
 }
