@@ -10,7 +10,10 @@ This game has the features of 2048 and also have features like undo, redo and re
 
 In the project directory, you can run:
 
- ### `yarn`<p>for installing node modules</p>
- ### `yarn start`<p>Runs the app in the development mode.</p>
+ ### `yarn`
+ for installing node modules
+ 
+ ### `yarn start`
+ Runs the app in the development mode.
 
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
