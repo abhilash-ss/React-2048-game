@@ -1,5 +1,5 @@
 # React-2048-game
-![Screenshot from 2020-08-02 16-36-29](https://user-images.githubusercontent.com/22938813/89121678-750f8100-d4de-11ea-84f3-38ea4c94f360.png)
+![Screenshot from 2020-08-02 16-52-22](https://user-images.githubusercontent.com/22938813/89121888-a4bf8880-d4e0-11ea-90dc-b1ebde051fa6.png)
 
 
 This is 2048 game using react. This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
