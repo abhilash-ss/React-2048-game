@@ -39,16 +39,16 @@ function App() {
     message: '',
   });
   // Inititalize
-  const initialize = () => {
-    let newGrid = cloneDeep(data);
+  // const initialize = () => {
+  //   let newGrid = cloneDeep(data);
 
-    addItem(newGrid);
+  //   addItem(newGrid);
 
-    addItem(newGrid);
+  //   addItem(newGrid);
 
-    setData(newGrid);
-    setNewGame(false);
-  };
+  //   setData(newGrid);
+  //   setNewGame(false);
+  // };
 
   // Add item
   const addItem = (newGrid) => {
@@ -421,14 +421,24 @@ function App() {
   };
 
   useEffect(() => {
+    const initialize = () => {
+      let newGrid = cloneDeep(data);
+
+      addItem(newGrid);
+
+      addItem(newGrid);
+
+      setData(newGrid);
+      setNewGame(false);
+    };
     if (newGame) {
       initialize();
     }
-  }, [newGame]);
+  }, [data, newGame, setData, setNewGame]);
 
   useEffect(() => {
     setBest(Math.max(...scoreHistory, score));
-  }, [score]);
+  }, [score, scoreHistory, setBest]);
 
   useEvent('keydown', handleKeyDown);
 
